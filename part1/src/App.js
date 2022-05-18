@@ -1,10 +1,14 @@
 const Header = ({ title }) => <h1>{title}</h1>
 
+const Part = ({ part, exercises }) => (
+  <p>{part} {exercises}</p>
+)
+
 const Content = ({ parts, exercises }) => (
   <>
-    {parts.map((part, index) => (
-      <p> {part} {exercises[index]}</p>
-    ))}
+    <Part part={parts[0]} exercises={exercises[0]} />
+    <Part part={parts[1]} exercises={exercises[1]} />
+    <Part part={parts[2]} exercises={exercises[2]} />
   </>
 )
 
