@@ -10,8 +10,6 @@ const App = () => (
     maxWidth: '600px'
   }}>
     <Courses />
-    <Unicafe />
-    <Anecdotes />
   </div>
 )
 
