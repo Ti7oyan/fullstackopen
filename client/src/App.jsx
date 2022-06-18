@@ -12,9 +12,9 @@ import {
 } from './services/persons';
 
 // Components
-import Search from './Search';
-import AddPerson from './AddPerson';
-import Person from './Person';
+import Search from './components/Search';
+import AddPerson from './components/AddPerson';
+import Person from './components/Person';
 
 export default function App() {
   const [persons, setPersons] = useState([])
