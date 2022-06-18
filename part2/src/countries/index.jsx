@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Countries from './Countries';
 
 export default function App() {
@@ -16,19 +16,24 @@ export default function App() {
     setSearchText(event.target.value);
   }
 
-  const filterByName = (name) => name.toLowerCase().includes(searchText);
+  // const filterByName = (name) => name.toLowerCase().includes(searchText);
+  const filterByName = useCallback((name) => name.toLowerCase().includes(searchText), [searchText])
 
   useEffect(() => {
     const newShownCountries = countries.filter((country) => filterByName(country.name.common))
     setShownCountries(newShownCountries)
-  }, [searchText])
+  }, [searchText, countries, filterByName])
+
+  if (countries.length === 0) {
+    return <p>Loading...</p>
+  }
 
   return (
     <main>
-
       <input type="text" value={searchText} onChange={handleSearch} />
 
       <Countries countries={shownCountries} />
     </main>
   )
+
 }

@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
+const { REACT_APP_WEATHER_KEY } = process.env;
+
 export default function CountryInfo({ country }) {
   const [weather, setWeather] = useState(undefined);
   const languages = Object.values(country.languages);
-  const api = process.env.REACT_APP_API_KEY;
+  const api = REACT_APP_WEATHER_KEY;
   const baseUrl = 'http://api.weatherapi.com/v1'
 
   useEffect(() => {

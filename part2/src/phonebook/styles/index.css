@@ -1,0 +1,15 @@
+.status-message {
+  padding: .95em;
+  color: #fff;
+  border: 1px solid;
+  border-radius: 2em;
+  width: max-content;
+}
+
+.status-message.success {
+  background-color: #080;
+}
+
+.status-message.failed {
+  background-color: #a00;
+}
