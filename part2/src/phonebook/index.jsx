@@ -60,14 +60,12 @@ export default function App() {
           number: newNumber
         }
         updatePerson(newData).then((status) => {
-          if (status === 200) {
-            const filteredPersons = persons.filter(({ id }) => id !== newData.id);
-            handleStatus({
-              success: true, message: `${newData.name} updated successfully.`
-            })
-            setPersons([...filteredPersons, newData])
-            resetFields();
-          }
+          const filteredPersons = persons.filter(({ id }) => id !== newData.id);
+          handleStatus({
+            success: true, message: `${newData.name} updated successfully.`
+          })
+          setPersons([...filteredPersons, newData])
+          resetFields();
         }).catch((error) => handleStatus({
           success: false,
           message: `${newData.name} was not found. | ${error.code}`
@@ -81,14 +79,12 @@ export default function App() {
       }
 
       createPerson(personObject).then((status) => {
-        if (status === 201) {
-          handleStatus({
-            success: true,
-            message: `${personObject.name} created successfully.`
-          })
-          setPersons([...persons, personObject])
-          resetFields()
-        }
+        handleStatus({
+          success: true,
+          message: `${personObject.name} created successfully.`
+        })
+        setPersons([...persons, personObject])
+        resetFields()
       })
     }
   }, [newName, newNumber, persons, handleStatus])
@@ -101,14 +97,12 @@ export default function App() {
     const thisPerson = persons.find((person) => person.id === id);
     if (window.confirm(`Are you sure you want to delete ${thisPerson.name}?`)) {
       deletePerson(id).then((status) => {
-        if (status === 200) {
-          const newPersons = persons.filter(({ id: personId }) => personId !== id)
-          handleStatus({
-            success: true,
-            message: `${thisPerson.name} deleted successfully.`
-          })
-          setPersons(newPersons);
-        }
+        const newPersons = persons.filter(({ id: personId }) => personId !== id)
+        handleStatus({
+          success: true,
+          message: `${thisPerson.name} deleted successfully.`
+        })
+        setPersons(newPersons);
       }).catch((error) => handleStatus({
         success: false,
         message: `The attempt to remove ${thisPerson.name} was unsuccessfull. | ${error.code}`
