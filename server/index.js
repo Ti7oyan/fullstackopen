@@ -43,10 +43,6 @@ let persons = [
 
 // Routes
 
-app.get('/', (request, response) => {
-  response.send('<h1>Phonebook service!</h1>')
-})
-
 app.get('/info', (request, response) => {
   response.send(`
     <div>
@@ -96,6 +92,8 @@ app.post('/api/persons', (request, response) => {
 })
 
 const PORT = process.env.PORT || 3001;
+
+app.use(express.static('build'))
 
 app.listen(PORT, () => {
   console.log(`Server running in port ${PORT}`)
