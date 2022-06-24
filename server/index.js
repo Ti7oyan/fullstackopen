@@ -44,21 +44,21 @@ app.get('/api/persons', (request, response) => {
     });
 });
 
-app.get('/api/persons/:id', (request, response, next) => {
+app.get('/api/persons/:id', (request, response) => {
   Person
     .findById(request.params.id)
     .then((person) => {
       if (!person) response.status(404).end();
       response.json(person);
     })
-    .catch((error) => next(error));
+    .catch((error) => response.status(400).send({ error }));
 });
 
-app.delete('/api/persons/:id', (request, response, next) => {
+app.delete('/api/persons/:id', (request, response) => {
   Person
     .findByIdAndDelete(request.params.id)
     .then(() => response.status(204).send({ status: `Successfully deleted person with ID of ${request.params.id}` }))
-    .catch((error) => next(error));
+    .catch((error) => response.status(400).send({ error }));
 });
 
 const isListed = (name) => {
@@ -75,13 +75,13 @@ app.put('/api/persons/:id', (request, response) => {
       { runValidators: true, context: 'query' },
     )
     .then(() => response.json({ status: `Successfully updated person with ID of ${request.params.id}` }))
-    .catch((error) => response.status(400).send({ status: `There was an error: ${error.message}` }));
+    .catch((error) => response.status(400).send({ error }));
 });
 
-app.post('/api/persons', (request, response, next) => {
+app.post('/api/persons', (request, response) => {
   const { name, number } = request.body;
 
-  if (isListed(name)) return response.status(400).send({ error: 'That name is already listed' });
+  if (isListed(name)) return response.status(400).send({ error: 'That name is already listed.' });
 
   const newPerson = new Person({
     name,
@@ -90,28 +90,14 @@ app.post('/api/persons', (request, response, next) => {
 
   newPerson.save()
     .then((savedPerson) => response.json(savedPerson))
-    .catch((error) => next(error));
+    .catch((error) => response.status(400).send({ error }));
 
-  return response.json(newPerson);
+  return newPerson;
 });
 
 const unknownEndpoint = (request, response) => response.status(404).send({ error: 'Unknown endpoint' });
 
 app.use(unknownEndpoint);
-
-const errorHandler = (error, request, response, next) => {
-  console.log(error.message);
-
-  switch (error.name) {
-    case 'CastError':
-      return response.status(400).send({ error: 'Malformatted ID' });
-    case 'ValidationError':
-      return response.status(400).send({ error: error.message });
-    default:
-      return next(error);
-  }
-};
-app.use(errorHandler);
 
 const { PORT } = process.env;
 
