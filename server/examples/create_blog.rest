@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Tech STUFF",
+  "author": "German Ornell",
+  "url": "https://google.com/",
+  "likes": 200
+}
