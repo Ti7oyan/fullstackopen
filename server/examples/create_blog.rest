@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Tech STUFF",
-  "author": "German Ornell",
-  "url": "https://google.com/",
-  "likes": 200
+  "title": "Mother Histories",
+  "author": "Gilda Lauren",
+  "url": "https://bing.com/",
+  "likes": 395
 }
