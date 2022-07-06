@@ -19,6 +19,22 @@ const mostBlogs = (blogs) => {
   return authorsData[blogsQuantity.indexOf(withMostBlogs)];
 }
 
+const mostLikes = (blogs) => {
+  const authors = _.uniq(blogs.map((blog) => blog.author));
+  const likes = authors.map((author) => {
+    const authorBlogs = blogs.filter(({ author: blogAuthor }) => blogAuthor === author)
+    const authorLikes = authorBlogs.reduce((prevValue, { likes }) => prevValue + likes, 0);
+    return authorLikes;
+  })
+
+  const maxLikes = Math.max(...likes);
+
+  return {
+    name: authors[likes.indexOf(maxLikes)],
+    likes: maxLikes
+  }
+}
+
 module.exports = {
-  totalLikes, favouriteBlog, mostBlogs
+  totalLikes, favouriteBlog, mostBlogs, mostLikes
 }

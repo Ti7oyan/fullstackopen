@@ -68,3 +68,15 @@ describe('most blogs', () => {
     expect(result).toEqual({ name: 'Gilda Lauren', blogs: 2 })
   })
 })
+
+describe('most likes', () => {
+  test('When there is only one blog, return its author and likes', () => {
+    const result = listHelper.mostLikes(listWithOneBlog);
+    expect(result).toEqual({ name: 'German Ornell', likes: 200 })
+  })
+
+  test('When there are more than one blog, return the most liked author and their likes', () => {
+    const result = listHelper.mostLikes(listWithThreeBlogs);
+    expect(result).toEqual({ name: 'Gilda Lauren', likes: 795 })
+  })
+})
