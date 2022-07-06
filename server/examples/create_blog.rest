@@ -4,6 +4,5 @@ Content-Type: application/json
 {
   "title": "Mother Histories",
   "author": "Gilda Lauren",
-  "url": "https://bing.com/",
-  "likes": 395
+  "url": "https://bing.com/"
 }
