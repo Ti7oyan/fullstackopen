@@ -2,7 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Mother Histories",
+  "title": "Mother History",
   "author": "Gilda Lauren",
-  "url": "https://bing.com/"
+  "url": "https://bing.com/",
+  "userId": "62c7624db3f6f99735d6a18c"
 }

@@ -6,7 +6,10 @@
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
-    "test": "jest --verbose -i"
+    "test": "jest --verbose -i",
+    "test:user": "jest --verbose -i -- tests/user_api.test.js",
+    "test:blog": "jest --verbose -i -- tests/blog_api.test.js",
+    "lint": "eslint ."
   },
   "keywords": [
     "server",
@@ -16,6 +19,8 @@
   "author": "Ticiano Morvan",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "consola": "^2.15.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
@@ -25,7 +30,6 @@
     "mongoose-unique-validator": "^3.1.0"
   },
   "devDependencies": {
-    "consola": "^2.15.3",
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
