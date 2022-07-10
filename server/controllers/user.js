@@ -4,16 +4,18 @@ const usersRouter = require('express').Router();
 const User = require('../models/user');
 
 usersRouter.post('/', async (request, response) => {
-  const { userName, name, password } = request.body;
+  const { username, name, password } = request.body;
 
-  const sameUserName = await User.findOne({ userName });
-  if (!isEmpty(sameUserName)) return response.status(400).end();
+  const sameusername = await User.findOne({ username });
+  if (username.length < 3) return response.status(400).json({ error: 'username has to have at least three characters.' });
+  if (password.length < 3) return response.status(400).json({ error: 'Password has to have at least three characters.' });
+  if (!isEmpty(sameusername)) return response.status(400).json({ error: 'username already exists in database.' });
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
   const user = new User({
-    userName,
+    username,
     name,
     passwordHash,
   });

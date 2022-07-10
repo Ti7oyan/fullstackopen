@@ -56,8 +56,14 @@ describe('Testing endpoints', () => {
     });
 
     test("If likes aren't present in the request, define its value to zero", async () => {
+      const login = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'rootpassword' })
+        .expect(200);
+
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${login.body.token}`)
         .send({
           title: 'TEST_BLOG_WITHOUT_LIKES',
           author: 'TESTER',
@@ -71,8 +77,14 @@ describe('Testing endpoints', () => {
     });
 
     test('If title and url are not sent on the request, it returns a 400 Bad Request status', async () => {
+      const login = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'rootpassword' })
+        .expect(200);
+
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${login.body.token}`)
         .send({
           author: 'TESTER',
           likes: 20,

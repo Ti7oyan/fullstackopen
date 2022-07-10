@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRpdG95YW4iLCJpZCI6IjYyY2IxMzBjOTJiODc3NWFjZTZkMThjYyIsImlhdCI6MTY1NzQ3Nzc2MH0.VSv1f_AjR8hxTpBIglwWJZfcjQzoMORyqPva8xJj1lY
 
 {
-  "title": "Mother History",
-  "author": "Gilda Lauren",
-  "url": "https://bing.com/",
-  "userId": "62c7624db3f6f99735d6a18c"
+  "title": "Tito blog",
+  "author": "Tito",
+  "url": "https://ticianomorvan.me",
+  "likes": 100
 }

@@ -9,7 +9,7 @@ describe('When there is initially a user in database', () => {
     await User.deleteMany({});
 
     const passwordHash = await bcrypt.hash('rootpassword', 10);
-    const user = new User({ userName: 'root', name: 'root', passwordHash });
+    const user = new User({ username: 'root', name: 'root', passwordHash });
     await user.save();
   });
 
@@ -17,7 +17,7 @@ describe('When there is initially a user in database', () => {
     const usersAtStart = await usersInDb();
 
     const user = {
-      userName: 'FreshUser202',
+      username: 'FreshUser202',
       name: 'Fresh User',
       password: 'freshUserPassword',
     };
@@ -33,17 +33,82 @@ describe('When there is initially a user in database', () => {
     expect(actualUsers.length).toBeGreaterThan(usersAtStart.length);
   });
 
-  test('If tries to create a user with a taken username, fail with proper status code', async () => {
-    const user = {
-      userName: 'root',
-      name: 'George Lucas',
-      password: 'notThatFresh2023',
-    };
+  describe('Registration requisites:', () => {
+    test('If tries to create a user with a taken username, fail with proper status code', async () => {
+      const user = {
+        username: 'root',
+        name: 'George Lucas',
+        password: 'notThatFresh2023',
+      };
 
-    await api
-      .post('/api/users')
-      .send(user)
-      .expect(400);
+      await api
+        .post('/api/users')
+        .send(user)
+        .expect(400);
+    });
+
+    test('If tries to create a user with a password with less than 3 characters, fail with proper status code', async () => {
+      const user = {
+        username: 'George',
+        password: '21',
+      };
+
+      await api
+        .post('/api/users')
+        .send(user)
+        .expect(400);
+    });
+
+    test('If tries to create a user with a password with less than 3 characters, fail with proper status code', async () => {
+      const user = {
+        username: 'As',
+        password: 'Ii282jj3',
+      };
+
+      await api
+        .post('/api/users')
+        .send(user)
+        .expect(400);
+    });
+  });
+
+  describe('Authorized actions', () => {
+    test('Login with username and password', async () => {
+      const user = {
+        username: 'root',
+        password: 'rootpassword',
+      };
+
+      await api
+        .post('/api/login')
+        .send(user)
+        .expect(200);
+    });
+
+    test('Login and then create a blog', async () => {
+      const blog = {
+        title: 'TEST_BLOG',
+        author: 'TESTER',
+        likes: 777,
+        url: 'https://blogspot.com',
+      };
+
+      const user = {
+        username: 'root',
+        password: 'rootpassword',
+      };
+
+      const login = await api
+        .post('/api/login')
+        .send(user)
+        .expect(200);
+
+      await api
+        .post('/api/blogs')
+        .send(blog)
+        .set('Authorization', `Bearer ${login.body.token}`)
+        .expect(200);
+    });
   });
 });
 

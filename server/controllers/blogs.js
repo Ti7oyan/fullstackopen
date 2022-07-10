@@ -1,4 +1,5 @@
 const blogsRouter = require('express').Router();
+const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
@@ -15,8 +16,18 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const {
-    title, author, url, likes, userId,
+    title, author, url, likes,
   } = request.body;
+  const { token } = request;
+
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({
+      error: 'Token missing or invalid',
+    });
+  }
+
+  const user = await User.findById(decodedToken.id);
 
   if (title && url) {
     const blog = new Blog({
@@ -24,23 +35,35 @@ blogsRouter.post('/', async (request, response) => {
       author,
       url,
       likes,
-      user: userId,
+      user: user.id,
     });
 
     const savedBlog = await blog.save();
-    const user = await User.findById(userId);
-    await User.findByIdAndUpdate(userId, { blogs: user.blogs.concat(savedBlog) });
-    response.json(savedBlog);
-  } else {
-    response.status(400).end();
+    await User.findByIdAndUpdate(user.id, { blogs: user.blogs.concat(savedBlog) });
+    return response.json(savedBlog);
   }
+
+  return response.status(400).end();
 });
 
 blogsRouter.delete('/:id', async (request, response) => {
   const { id } = request.params;
+  const { token } = request;
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({
+      error: 'Token missing or invalid',
+    });
+  }
 
-  await Blog.findByIdAndRemove(id);
-  response.status(204).end();
+  const user = await User.findById(decodedToken.id);
+  const blog = await Blog.findById(id).populate('user');
+  if (blog.user.id.toString() === user.id.toString()) {
+    await blog.remove();
+    return response.status(204).end();
+  }
+
+  return response.status(401).json({ error: "You don't have permissions to do this." });
 });
 
 blogsRouter.put('/:id', async (request, response) => {
